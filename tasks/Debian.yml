@@ -1,9 +1,11 @@
 ---
 - name: Ensure apt cache is up to date
+  sudo: True
   apt:
     update_cache: yes
 
 - name: Install prerequisite packages
+  sudo: True
   apt:
     pkg: "{{ item }}"
     state: present
@@ -15,6 +17,7 @@
     - curl
 
 - name: Install development packages necessary for building Python
+  sudo: True
   apt:
     pkg: "{{ item }}"
     state: present
@@ -25,19 +28,22 @@
     - libreadline-dev
 
 - name: Install PyEnv
-  sudo: no
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
   git:
     repo: https://github.com/yyuu/pyenv.git
     dest: "{{ pyenv_path }}"
 
 - name: Install PyEnv-virtualenv plugin
-  sudo: no
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
   git:
     repo: https://github.com/yyuu/pyenv-virtualenv.git
     dest: "{{ pyenv_path }}/plugins/pyenv-virtualenv"
 
 - name: Install .pyenvrc
-  sudo: no
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
   template:
     src: ".pyenvrc.j2"
     dest: "{{ pyenv_path }}/.pyenvrc"
@@ -46,20 +52,23 @@
     mode: "0644"
 
 - name: Modify .bashrc
-  sudo: no
-  lineinfile: dest="/home/{{ pyenv_owner }}/.bashrc"
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
+  lineinfile: dest="~/.bashrc"
               regexp="\.pyenvrc$"
               line="source {{ pyenv_path }}/.pyenvrc"
               state=present
 
 - name: Install Python interpreters {{ pyenv_python_versions }}
-  sudo: no
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
   shell: . {{ pyenv_path }}/.pyenvrc && pyenv install {{ item }}
          creates="{{ pyenv_path }}/versions/{{ item }}/bin/python"
   with_items: pyenv_python_versions
 
 - name: Create virtual environments
-  sudo: no
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
   shell: . {{ pyenv_path }}/.pyenvrc && pyenv virtualenv {{ item.py_version }} {{ item.venv_name }}
          creates="{{ pyenv_path }}/versions/{{ item.venv_name }}/bin/python"
   with_items: pyenv_virtualenvs

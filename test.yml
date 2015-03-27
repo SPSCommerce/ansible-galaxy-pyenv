@@ -1,0 +1,10 @@
+ - hosts: all
+   vars:
+      pyenv_python_versions:
+      - "3.4.2"
+      - "2.7.8"
+      pyenv_owner: ubuntu
+      pyenv_path: "pyenv"
+      pyenv_virtualenvs: []
+   roles:
+     - { role: ./}
