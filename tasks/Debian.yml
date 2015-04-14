@@ -58,6 +58,7 @@
               regexp="\.pyenvrc$"
               line="source {{ pyenv_path }}/.pyenvrc"
               state=present
+              create=yes
 
 - name: Install Python interpreters {{ pyenv_python_versions }}
   sudo: True
