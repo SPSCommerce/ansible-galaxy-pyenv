@@ -26,6 +26,10 @@
     - libbz2-dev
     - libsqlite3-dev
     - libreadline-dev
+    - make
+    - build-essential
+    - wget
+    - llvm
 
 - name: Install PyEnv
   sudo: True
