@@ -72,9 +72,23 @@
   with_items: pyenv_python_versions
   when: pyenv_python_versions
 
-- name: Create virtual environments
+- name: Create virtual environments (plugin)
   sudo: True
   sudo_user: "{{ pyenv_owner }}"
   shell: . {{ pyenv_path }}/.pyenvrc && pyenv virtualenv {{ item.py_version }} {{ item.venv_name }}
          creates="{{ pyenv_path }}/versions/{{ item.venv_name }}/bin/python"
   with_items: pyenv_virtualenvs
+  when: pyenv_virtualenvs
+
+- name: create virtualenv(s) (noplugin)
+  sudo: True
+  sudo_user: "{{ pyenv_owner }}"
+  shell: >
+    . {{ pyenv_path }}/.pyenvrc
+    && pyenv shell {{ item.py_version }}
+    && pip install virtualenv
+    && virtualenv {{ item.venv_path }}
+  args:
+    creates: "{{ item.venv_path }}"
+  with_items: virtualenvs_nowrapper
+  when: virtualenvs_nowrapper

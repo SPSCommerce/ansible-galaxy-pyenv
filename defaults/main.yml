@@ -3,6 +3,9 @@
 pyenv_path: "{{ ansible_env.HOME }}/pyenv"
 pyenv_owner: "{{ ansible_env.USER }}"
 pyenv_python_versions:
-  - 3.4.1
+  - 3.4.3
 pyenv_virtualenvs:
-  - { venv_name: "latest", py_version: "3.4.1" }
+  - { venv_name: "latest", py_version: "3.4.3" }
+virtualenvs_nowrapper:
+  - { venv_path: /opt/deploy/env, py_version: "3.4.3" }
+
