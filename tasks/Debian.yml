@@ -70,7 +70,6 @@
   shell: . {{ pyenv_path }}/.pyenvrc && pyenv install {{ item }}
          creates="{{ pyenv_path }}/versions/{{ item }}/bin/python"
   with_items: pyenv_python_versions
-  when: pyenv_python_versions
 
 - name: Create virtual environments (plugin)
   sudo: True
@@ -78,7 +77,6 @@
   shell: . {{ pyenv_path }}/.pyenvrc && pyenv virtualenv {{ item.py_version }} {{ item.venv_name }}
          creates="{{ pyenv_path }}/versions/{{ item.venv_name }}/bin/python"
   with_items: pyenv_virtualenvs
-  when: pyenv_virtualenvs
 
 - name: create virtualenv(s) (noplugin)
   sudo: True
@@ -91,4 +89,3 @@
   args:
     creates: "{{ item.venv_path }}"
   with_items: virtualenvs_nowrapper
-  when: virtualenvs_nowrapper
